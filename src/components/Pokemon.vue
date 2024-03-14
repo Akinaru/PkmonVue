@@ -2,17 +2,18 @@
       <div class="card">
         <div class="titre">
             <h4 class="nom" v-if="pokemon.name">{{ pokemon.name }}</h4>
-            <img class="shiny" src="https://cdn.discordapp.com/attachments/796132389012242473/1217837379558051861/shiny.png?ex=66057a71&is=65f30571&hm=e72cef78e444901d05eb1cbe03a1138350ee4a939ae85f04c26cf559be6481ad&"/>
+            <img :class="{ shinyState: !isShiny }" @click="toggleSprite" class="shiny" src="https://cdn.discordapp.com/attachments/796132389012242473/1217837379558051861/shiny.png?ex=66057a71&is=65f30571&hm=e72cef78e444901d05eb1cbe03a1138350ee4a939ae85f04c26cf559be6481ad&"/>
 
         </div>
         <div class="image-container">
-            <img class="image" v-if="pokemon && pokemon.sprites" :src="pokemon.sprites.front_default" alt="Sprite">
+            <img class="image" v-if="pokemon && pokemon.sprites" :src="urlImg" alt="Sprite">
         </div>
+  
       </div>
   </template>
   
   <script setup>
-  import { ref, defineProps, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
 
   const props = defineProps({
       name: String,
@@ -21,12 +22,23 @@
   
   const pokemon = ref({});
   const sprites = ref();
+  const urlImg = ref('');
+  const spriteShiny = ref('');
+  const spriteDefault = ref('');
+  const isShiny = ref(false);
   
   async function fetchPokemon() {
-      const result = await fetch(props.url);
-      pokemon.value = await result.json();
-  }
-  
+    const result = await fetch(props.url);
+    const pokemonData = await result.json();
+    pokemon.value = pokemonData;
+    spriteDefault.value = pokemonData.sprites.front_default;
+    spriteShiny.value = pokemonData.sprites.front_shiny;
+    toggleSprite();
+}
+function toggleSprite() {
+  isShiny.value = !isShiny.value;
+  urlImg.value = isShiny.value ? spriteDefault.value : spriteShiny.value;
+}
   
   onMounted(fetchPokemon);
   </script>
@@ -55,12 +67,19 @@
   }
   .shiny{
     transition: 0.1s;
+    width: 20px;
+    height: 30px;
+  
   }
   .shiny:hover{
     opacity: 0.6;
     cursor: pointer;
-    
   }
+  .shinyState {
+    filter: grayscale(100%);
+    transition: 0.5s;
+  }
+
   .nom {
       display: flex;
       justify-content: center;
@@ -85,9 +104,6 @@
     .image:hover {
     transform: scale(1.2);
     }
-    .shiny{
-        width: 20px;
-        height: 30px;
-    }
+
   </style>
   
