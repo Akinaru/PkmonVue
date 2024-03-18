@@ -1,15 +1,17 @@
 <template>
-  <div>
-    <h1>Pokemons</h1>
-    <div>
-      <input type="text" v-model="searchQuery" placeholder="Rechercher un Pokémon">
-    </div>
+
+  <div class="page">
+    <header>
+      <h1>Pokemons</h1>
+      <input class="searchbar" type="text" v-model="searchQuery" placeholder="Rechercher un Pokémon">
+    </header>
     <div class="card-container">
       <Pokemon v-for="pokemon in paginatedPokemons" :name="pokemon.name" :url="pokemon.url" :key="pokemon.url"></Pokemon>
+      <h1>{{ paginatedPokemons.count }}</h1>
     </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">Précédent</button>
-      <span>{{ currentPage }}</span>
+      <h3>{{ currentPage }}</h3>
       <button @click="nextPage" :disabled="currentPage >= totalPages">Suivant</button>
     </div>
   </div>
@@ -37,6 +39,7 @@ const filteredPokemons = computed(() => {
   let filtered = pokemons.value;
   if (searchQuery.value) {
     filtered = filtered.filter(pokemon => pokemon.name.includes(searchQuery.value.toLowerCase()));
+    currentPage.value = 1;
   }
   return filtered;
 });
@@ -63,15 +66,39 @@ const nextPage = () => {
 </script>
 
 <style scoped>
+
+
+.page{
+  background-color: #14213d;
+  min-height: 100vh;
+  max-height: 100vh;
+}
+header{
+  display: flex;
+  justify-content: space-between;
+}
+h1{
+  color: #fca311;
+}
 .card-container {
   display: flex;
   flex-wrap: wrap; /* Les éléments flexibles vont passer à la ligne si nécessaire */
   justify-content: center; /* Centre les cartes horizontalement */
 }
+.searchbar{
+  border: 0;
+  padding: 0.5rem;
+  width: 25%;
+}
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  align-items: center;
+  margin: 1rem;
   gap: 10px;
+  color: #fca311;
+}
+.pagination button{
+  padding: 10px;
 }
 </style>

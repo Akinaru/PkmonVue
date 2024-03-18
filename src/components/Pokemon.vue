@@ -57,6 +57,7 @@ function toggleSprite() {
       transition: transform 0.3s;
       margin: 0.5rem; 
       overflow: hidden;
+      background-color: #e5e5e5;
   }
   .titre{
     display: flex;
