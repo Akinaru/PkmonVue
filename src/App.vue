@@ -1,9 +1,9 @@
 <template>
 
-  <div class="page">
+  <div class="page bg-[#14213d]">
     <header>
       <h1>Pokemons</h1>
-      <input class="searchbar" type="text" v-model="searchQuery" placeholder="Rechercher un Pokémon">
+      <input class="searchbar " type="text" v-model="searchQuery" placeholder="Rechercher un Pokémon">
     </header>
     <div class="card-container">
       <Pokemon v-for="pokemon in paginatedPokemons" :name="pokemon.name" :url="pokemon.url" :key="pokemon.url"></Pokemon>
@@ -69,7 +69,6 @@ const nextPage = () => {
 
 
 .page{
-  background-color: #14213d;
   min-height: 100vh;
   max-height: 100vh;
 }
@@ -97,8 +96,5 @@ h1{
   margin: 1rem;
   gap: 10px;
   color: #fca311;
-}
-.pagination button{
-  padding: 10px;
 }
 </style>
